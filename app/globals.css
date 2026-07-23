@@ -1,0 +1,409 @@
+/*
+ * Fuel Finance — Client Dashboard global styles.
+ *
+ * Source of truth for every value below is `/docs/reference-build.html` — copied here
+ * VERBATIM, not retyped. If a token or component class ever changes, change it in both
+ * places by copying, never by eyeballing a value from one file into the other.
+ *
+ * This file holds BOTH the color/font tokens AND the fixed set of shared component
+ * classes (.topbar, .tabnav, .btn, .chip, .seg, .kpi-card, table styles, drill-pop,
+ * etc.) that `components/` builds against — this is a single-app repo (Portal +
+ * Main Finance Page merged into one Next.js app), so there's exactly one real
+ * implementation of these classes, not a per-client copy of a pattern to reinvent.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg: #FAFAFA;
+  --panel: #FFFFFF;
+  --panel-2: #F3F4F6;
+  --border: #E5E7EB;
+  --border-soft: #ECEDEF;
+
+  --black: #0A0A0A;
+  --black-2: #161616;
+  --on-black-muted: rgba(255, 255, 255, .55);
+  --on-black-border: rgba(255, 255, 255, .12);
+
+  --green: #2BBC62;
+  --green-dark: #1E9950;
+  --green-soft: rgba(43, 188, 98, .12);
+  --purple: #864DFE;
+  --purple-soft: rgba(134, 77, 254, .10);
+  --blue: #11B3E7;
+  --pink: #EC4862;
+  --pink-soft: rgba(236, 72, 98, .10);
+  --teal: #46BDC6;
+
+  --text: #111111;
+  --muted: #6B7280;
+  --muted-2: #9CA3AF;
+
+  --font-num: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Fixed ambient background glows — decorative, but part of the base page canvas
+   on every tab, so they live here rather than being re-added per page. */
+body::before {
+  content: '';
+  position: fixed;
+  top: -220px;
+  left: -160px;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(43, 188, 98, .14), rgba(43, 188, 98, 0) 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -260px;
+  right: -200px;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(70, 189, 198, .12), rgba(70, 189, 198, 0) 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==================== Top bar (black) ==================== */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px; background: var(--black); border-bottom: 1px solid #000;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.fuel-logo { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 6px; padding: 8px 10px; }
+.fuel-logo img { height: 13px; width: auto; display: block; }
+.brand .divider { width: 1px; height: 20px; background: var(--on-black-border); }
+.crumb { display: flex; align-items: center; gap: 8px; }
+.crumb .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(43,188,98,.25); }
+.crumb .name { font-size: 13px; color: var(--on-black-muted); }
+.crumb .name b { color: #fff; font-weight: 600; }
+.top-actions { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--green);
+  display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #06210F;
+  box-shadow: 0 0 0 2px var(--black), 0 0 0 3.5px rgba(43,188,98,.4);
+  cursor: pointer; border: none;
+}
+
+/* ==================== Segmented pill tab nav (black, floating) ==================== */
+.tabnav-wrap {
+  position: sticky; top: 65px; z-index: 15; display: flex; justify-content: flex-start; padding: 18px 32px 0;
+  background: linear-gradient(180deg, var(--bg) 60%, rgba(250,250,250,0));
+}
+.tabnav {
+  display: flex; gap: 2px; background: var(--black); border-radius: 999px; padding: 5px;
+  box-shadow: 0 10px 30px rgba(10,10,10,.18); width: fit-content; max-width: 100%; margin: 0;
+  overflow-x: auto;
+}
+.tabnav button {
+  appearance: none; border: none; background: none; color: var(--on-black-muted);
+  font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: .1px;
+  padding: 10px 18px; border-radius: 999px; cursor: pointer; position: relative; flex: none;
+  display: flex; align-items: center; gap: 7px; transition: color .15s ease, background .2s ease;
+}
+.tabnav button svg { width: 14px; height: 14px; opacity: .7; }
+.tabnav button:hover { color: #fff; }
+.tabnav button.active { color: var(--black); background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.tabnav button.active svg { opacity: 1; }
+.tabnav button .count { font-size: 10px; font-weight: 700; color: #fff; background: var(--black); border-radius: 20px; padding: 1px 6px; font-family: var(--font-num); }
+.tabnav button.active .count { background: var(--green); color: #06210F; }
+
+/* ==================== Page shell ==================== */
+/* Top padding keeps the page title clear of the sticky tab nav above it (design-rules.md §2) —
+   without it, h1 sits flush against the black pill nav on every tab. */
+.page { position: relative; z-index: 1; max-width: 1320px; margin: 0 auto; padding: 28px 32px 40px; }
+.panel-view { display: none; animation: fade .35s ease; }
+.panel-view.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.page-head h1 { font-size: 24px; font-weight: 700; letter-spacing: -.3px; color: var(--text); }
+.page-head p { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+.head-actions { display: flex; gap: 10px; }
+
+/* ==================== Buttons / chips / segmented controls ==================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-size: 12.5px; font-weight: 600;
+  padding: 10px 16px; border-radius: 9px; cursor: pointer; border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.btn svg { width: 13px; height: 13px; }
+.btn:hover { border-color: #D1D5DB; background: var(--panel-2); }
+.btn.primary { background: var(--black); border: 1px solid var(--black); color: #fff; position: relative; box-shadow: 0 8px 20px rgba(10,10,10,.22); }
+.btn.primary::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(43,188,98,.9); display: inline-block; }
+.btn.primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(10,10,10,.3); }
+
+.icon-btn { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; }
+.icon-btn svg { width: 13px; height: 13px; color: var(--muted); }
+.icon-btn:hover { background: var(--black); border-color: var(--black); }
+.icon-btn:hover svg { color: #fff; }
+
+.chip-row { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+.chip { font-size: 12px; font-weight: 600; color: var(--muted); padding: 7px 13px; border-radius: 20px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; transition: all .15s ease; }
+.chip.active { background: var(--black); border-color: var(--black); color: #fff; }
+
+.seg { display: flex; background: var(--black); border-radius: 999px; padding: 4px; gap: 2px; }
+.seg button { font-family: inherit; font-size: 12px; font-weight: 600; color: var(--on-black-muted); background: none; border: none; padding: 8px 15px; border-radius: 999px; cursor: pointer; transition: all .15s ease; }
+.seg button.active { background: #fff; color: var(--black); box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+.seg.right { margin-left: auto; }
+
+.toggle-plain { display: flex; gap: 18px; }
+.toggle-plain button { appearance: none; border: none; background: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--on-black-muted); cursor: pointer; padding: 8px 0; }
+.toggle-plain button.active { color: #fff; }
+.divider-v { width: 1px; height: 18px; background: var(--on-black-border); }
+
+.kpi-controls { display: flex; align-items: center; gap: 14px; background: var(--black); border-radius: 14px; padding: 6px 8px 6px 18px; flex-wrap: wrap; }
+.month-chip { display: flex; align-items: center; gap: 6px; background: #1E1E1E; border: none; border-radius: 9px; padding: 8px 12px; font-family: var(--font-num); font-size: 12.5px; font-weight: 600; color: #fff; cursor: pointer; }
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 12px; }
+
+/* ==================== KPI cards / summary cards ==================== */
+.grid-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpi-top-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 24px; align-items: stretch; }
+
+.kpi-card {
+  position: relative; background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 14px 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(17,17,17,.03);
+  transition: transform .15s ease, box-shadow .15s ease; display: flex; flex-direction: column;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(17,17,17,.06); }
+.kpi-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent, var(--green)); }
+.kpi-card .lbl { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+.kpi-card .val { font-size: 21px; font-weight: 700; margin-top: 8px; letter-spacing: -.3px; color: var(--text); font-family: var(--font-num); }
+.kpi-card .sub { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; min-height: 16px; }
+.delta { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 6px; font-family: var(--font-num); }
+.delta.up { color: var(--green-dark); background: var(--green-soft); }
+.delta.down { color: var(--pink); background: var(--pink-soft); }
+.kpi-card .note { font-size: 10.5px; color: var(--muted-2); }
+
+/* Two lines, not one crammed row — "Benchmark $X" on its own line, the variance +
+   healthy/attention indicator on the line below. A single flex row here used to force
+   the variance text and the icon to compete for space with the benchmark label itself,
+   overflowing the card on the narrower 3-column KPI grid. */
+.kpi-bench { display: flex; flex-direction: column; gap: 4px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+.bench-label { font-size: 10px; color: var(--muted-2); white-space: nowrap; }
+.bench-label b { font-family: var(--font-num); color: var(--muted); font-weight: 600; }
+.bench-delta-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-family: var(--font-num); font-size: 10.5px; font-weight: 600; }
+.health-badge { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.health-badge .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex: none; }
+.health-badge.good { color: var(--green-dark); background: var(--green-soft); }
+.health-badge.bad { color: var(--pink); background: var(--pink-soft); padding: 3px; }
+.health-badge.bad svg { width: 12px; height: 12px; display: block; }
+
+.grid-summary { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 24px; }
+.sum-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 15px 16px; box-shadow: 0 1px 2px rgba(17,17,17,.03); }
+.sum-card:first-child { background: var(--black); border-color: #000; }
+.sum-card:first-child .lbl { color: var(--on-black-muted); }
+.sum-card:first-child .val { color: #fff; }
+.sum-card .lbl { font-size: 10px; font-weight: 600; color: var(--muted-2); text-transform: uppercase; letter-spacing: .5px; }
+.sum-card .val { font-size: 19px; font-weight: 700; margin-top: 8px; color: var(--text); font-family: var(--font-num); }
+.sum-card .delta { margin-top: 7px; display: inline-block; }
+
+/* ==================== Chart panels — CHART MUST FILL THIS CONTAINER (design-rules.md §1) ==================== */
+.chart-panel { position: relative; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px 20px 8px; box-shadow: 0 1px 2px rgba(17,17,17,.03); display: flex; flex-direction: column; }
+.chart-panel h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; color: var(--text); }
+.chart-panel .cap { font-size: 11.5px; color: var(--muted-2); margin-bottom: 14px; }
+/* width:100% + flex:1 + min-height so the SVG stretches to fill whatever height the card gets — never a small fixed canvas floating in empty space. Regular/hero charts only — see .mini-chart below for why small supporting charts are handled differently. */
+.chart-panel svg.line-chart,
+.chart-panel svg.bar-chart {
+  width: 100%; height: 100%; flex: 1; min-height: 200px; display: block; margin-top: 6px;
+}
+/* Small supporting charts (design-rules.md §4) keep their own viewBox aspect ratio
+   instead of being force-stretched to a fixed card height — that combination (100%
+   height + a viewBox width tuned for a much wider card) is what squeezed/distorted
+   them and let labels overflow past the card edge. Natural height also means the 3
+   mini cards size consistently off the same aspect ratio without needing a fixed px height. */
+.chart-panel svg.mini-chart {
+  width: 100%; height: auto; display: block; margin-top: 6px;
+}
+.chart-panel-lg { margin-bottom: 16px; }
+.chart-panel-lg h3 { font-size: 15px; }
+.chart-panel.mini { padding: 16px 18px 14px; min-height: 180px; }
+.chart-panel.mini h3 { font-size: 12.5px; margin-bottom: 2px; }
+.chart-panel.mini .cap { font-size: 10.5px; margin-bottom: 4px; }
+
+/* Explicit heights so charts read as one consistent size across the Dashboard tab —
+   without this, a card with no defined height lets its svg's height:100% resolve
+   unpredictably (this is what produced an oversized EBITDA hero chart before). The
+   hero chart-panel-lg is only modestly taller than the regular ones, never "huge".
+   The KPI Report hero chart is deliberately excluded — .kpi-top-row already stretches
+   it to match the 6-card column's natural height (align-items: stretch). Mini charts
+   are excluded too — they size off their own aspect ratio (min-height above is a floor
+   only, so the "Composition — TODO" placeholder doesn't look collapsed). */
+.grid-dash-charts .chart-panel { height: 320px; }
+.chart-panel-lg { height: 340px; }
+
+.chart-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.mini-dropdown { display: flex; align-items: center; gap: 6px; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--muted); background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; white-space: nowrap; }
+
+/* Reference-line switcher (Avg / Benchmark / ...) — only renders when a chart has more
+   than one meaningful comparison to offer (design-rules.md §4 reference-line rule). */
+.ref-toggle { display: flex; justify-content: flex-end; gap: 4px; margin-bottom: 2px; }
+.ref-toggle button { font-family: inherit; font-size: 10.5px; font-weight: 600; color: var(--muted); background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 9px; cursor: pointer; transition: all .15s ease; }
+.ref-toggle button.active { background: var(--black); color: #fff; border-color: var(--black); }
+
+.grid-dash-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-mini-charts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.hl-up { color: var(--green-dark); font-weight: 700; }
+.hl-down { color: var(--pink); font-weight: 700; }
+
+/* hover-to-drill-down: hovering the highlighted (current period) bar reveals the calc breakdown panel */
+.bar-highlight { cursor: pointer; }
+.bar-highlight rect { transition: filter .15s ease; }
+.bar-highlight:hover rect { filter: brightness(1.35); }
+.drill-panel {
+  position: absolute; top: 16px; right: 16px; width: 230px; z-index: 40;
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; box-shadow: 0 16px 40px rgba(17,17,17,.18);
+  opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+.chart-panel:has(.bar-highlight:hover) .drill-panel { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+
+.comp-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; color: var(--muted); }
+.comp-row b { font-family: var(--font-num); color: var(--text); font-weight: 600; }
+.comp-row b.r { color: var(--pink); }
+.calc-note { font-size: 11px; color: var(--muted-2); margin-top: 8px; font-style: italic; }
+
+/* Universal drill-down popover (functionality-spec.md §6) — hover-only, no click, no pinned state. */
+.drillable { position: relative; display: inline-block; cursor: help; border-bottom: 1px dashed var(--muted-2); }
+.drillable .drill-pop {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(4px);
+  width: 220px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+  box-shadow: 0 16px 40px rgba(17,17,17,.18); opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease; z-index: 50; text-align: left;
+}
+.drillable:hover .drill-pop { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.drillable .drill-pop::before { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border: 7px solid transparent; border-top-color: var(--border); }
+.drillable .drill-pop::after { content: ''; position: absolute; top: calc(100% - 1px); left: 50%; transform: translateX(-50%); width: 0; height: 0; border: 6px solid transparent; border-top-color: #fff; }
+.drill-pop .drill-label { font-size: 9.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+.drill-pop .comp-row { font-size: 11.5px; }
+.kpi-card .drillable, .sum-card .drillable { border-bottom-color: var(--muted-2); }
+
+/* ==================== Executive Summary widget ==================== */
+.exec-summary { display: flex; gap: 16px; align-items: flex-start; background: var(--panel); border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 14px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 1px 2px rgba(17,17,17,.03); }
+.exec-summary .icon { width: 38px; height: 38px; border-radius: 10px; background: var(--green-soft); flex: none; display: flex; align-items: center; justify-content: center; }
+.exec-summary .icon svg { width: 18px; height: 18px; color: var(--green-dark); }
+.exec-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+.exec-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
+.exec-text .crit { color: var(--pink); font-weight: 700; }
+
+/* ==================== Table ==================== */
+/* Bounded height + its own vertical scrollbar (rather than letting the page grow past a
+   long table) is what lets the header stick to the top of THIS scroll area — a sticky
+   element's positioning is relative to its nearest scrolling ancestor, and overflow-x:auto
+   (needed for the sticky-left column below) makes that ancestor .table-wrap itself either
+   way, so there's no version of this that sticks to the page scroll instead. */
+.table-wrap { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow-x: auto; overflow-y: auto; max-height: 640px; box-shadow: 0 1px 2px rgba(17,17,17,.03); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { position: sticky; top: 0; z-index: 3; text-align: right; font-size: 10.5px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: .5px; padding: 13px 18px; white-space: nowrap; background: var(--black); border-bottom: 2px solid var(--green); }
+thead th:first-child { text-align: left; }
+tbody td { padding: 10px 18px; text-align: right; color: var(--text); white-space: nowrap; font-family: var(--font-num); }
+tbody td:first-child { text-align: left; color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+tbody tr { border-bottom: 1px solid var(--border-soft); }
+tbody tr:nth-child(even) { background: var(--panel-2); }
+tbody tr:hover { background: #F0FBF4; }
+tbody tr.section td { font-size: 10.5px; font-weight: 700; color: var(--black); text-transform: uppercase; letter-spacing: .6px; background: var(--green-soft); padding-top: 9px; padding-bottom: 9px; font-family: 'Space Grotesk', sans-serif; }
+tbody tr.total td { font-weight: 700; background: var(--black); color: #fff; border-top: 2px solid var(--green); border-bottom: 2px solid var(--green); }
+tbody tr.total td:first-child { color: #fff; }
+tbody tr.total .g { color: #7FE3A4; }
+tbody tr.total .r { color: #FF8FA0; }
+tbody tr.total .m { color: var(--on-black-muted); }
+.pct-of { display: block; font-size: 10.5px; color: var(--muted-2); margin-top: 1px; }
+.g { color: var(--green-dark); } .r { color: var(--pink); } .m { color: var(--muted-2); }
+
+/* Current-period column highlight — must always show its value, on every row type,
+   including total rows (design-rules.md §3: never a blank cell here). */
+th.active-col, td.active-col { background: var(--green-soft); }
+thead th.active-col { background: var(--black); color: #fff; }
+tbody td.active-col { color: var(--text); font-weight: 600; }
+tbody tr.total td.active-col { background: var(--black); color: #fff; }
+tbody tr.section td.active-col { background: var(--green-soft); }
+
+/* Freeze the label/metric column (first column) in every table — KPI Report and
+   Reports both use .table-wrap > table, so this one rule covers both (design-rules.md
+   §3/§5: the metric/line-item column must stay visible while the table scrolls
+   horizontally). Each row state needs its own explicit background on the sticky cell,
+   since a transparent cell would let scrolled-past columns show through underneath it. */
+.table-wrap table th:first-child,
+.table-wrap table td:first-child { position: sticky; left: 0; z-index: 2; box-shadow: 2px 0 4px rgba(17,17,17,.04); }
+/* The header's first cell is sticky on BOTH axes at once (top from the rule above, left
+   from here) — it's the "frozen corner" and needs the highest z-index so it stays above
+   both a plain sticky-top header cell and a plain sticky-left body cell as they scroll under it. */
+.table-wrap table thead th:first-child { background: var(--black); z-index: 4; }
+.table-wrap table tbody tr td:first-child { background: var(--panel); }
+.table-wrap table tbody tr:nth-child(even) td:first-child { background: var(--panel-2); }
+.table-wrap table tbody tr:hover td:first-child { background: #F0FBF4; }
+.table-wrap table tbody tr.section td:first-child { background: var(--green-soft); }
+.table-wrap table tbody tr.total td:first-child { background: var(--black); }
+
+/* Reports tab range toggle: hide month columns outside the selected range, but ONLY on
+   tagged data cells. The always-visible label column never carries an .r6/.r12/.r24
+   class, so it needs the explicit :not(:first-child) too — a class-less th otherwise
+   still matches ":not(.r6)" like any other untagged cell and gets hidden right along
+   with the months it's supposed to stay visible next to (design-rules.md §5). */
+/* #reports and .report-doc land on the SAME element here (one statement rendered at a
+   time, not several .report-doc siblings inside a shared #reports wrapper) — no space
+   between the two compound selectors below, or this never matches anything at all. */
+#reports[data-range="6"].report-doc:not([data-doc="custom"]) th:not(.r6):not(:first-child),
+#reports[data-range="6"].report-doc:not([data-doc="custom"]) td:not(.r6):not(:first-child) { display: none; }
+#reports[data-range="12"].report-doc:not([data-doc="custom"]) th:not(.r12):not(:first-child),
+#reports[data-range="12"].report-doc:not([data-doc="custom"]) td:not(.r12):not(:first-child) { display: none; }
+/* data-range="24" shows every column (all cells carry .r24) */
+
+/* ==================== Footer ==================== */
+.footer { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; background: var(--black); }
+.footer-links { display: flex; gap: 18px; }
+.footer-links a { font-size: 12px; color: var(--on-black-muted); }
+.footer-links a:hover { color: #fff; }
+
+/* ==================== Export PDF (window.print()) ==================== */
+/* "Export PDF" triggers the browser's native print dialog (save-as-PDF) rather than a
+   server-rendered file — no new backend/dependency, and it's a real handler instead of
+   a dead button (CLAUDE.md: never ship a control that visibly does nothing). This
+   stylesheet is what makes the printed/saved page look like a report instead of a
+   screenshot of the app chrome: no topbar, no nav, no interactive controls, no hover
+   affordances, and tables/cards are allowed to break across pages instead of being
+   clipped by their on-screen scroll containers. */
+@media print {
+  .topbar, .tabnav-wrap, .head-actions, .footer, .chart-head .mini-dropdown, .ref-toggle { display: none !important; }
+  body::before, body::after { display: none !important; }
+  .page { padding-top: 0 !important; }
+  .table-wrap { max-height: none !important; overflow: visible !important; box-shadow: none !important; }
+  thead th, .table-wrap table th:first-child, .table-wrap table td:first-child { position: static !important; }
+  .chart-panel, .kpi-card, .sum-card { box-shadow: none !important; break-inside: avoid; }
+  .drill-panel, .drillable .drill-pop { display: none !important; }
+}
