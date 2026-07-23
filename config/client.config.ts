@@ -19,8 +19,8 @@ export type QBOSource = {
 // lib/data/index.ts's switch on `dataSource.type` stays exhaustive over BOTH backends —
 // narrowing it to whichever one this client currently uses would break the QBO branch.
 export const clientConfig = {
-  name: "Acme Inc.",
-  slug: "acme", // used for repo name (fuel-acme-dashboard), Vercel project name, and the acme.fuelfinance.me subdomain (see README.md "Deploying to Vercel")
+  name: "Wildcard Inc.",
+  slug: "Wildcard", // used for repo name (fuel-wildcard-dashboard), Vercel project name, and the wildcard.fuelfinance.me subdomain (see README.md "Deploying to Vercel")
 
   dataSource: {
     type: "googleSheets",
